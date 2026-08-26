@@ -1,0 +1,105 @@
+version: "3.9"
+
+# ─── Rede customizada ────────────────────────────────────────────────────────
+# Bridge customizada permite comunicação entre containers pelo nome do serviço
+networks:
+  app-network:
+    driver: bridge
+
+# ─── Volumes nomeados ────────────────────────────────────────────────────────
+# Volume gerenciado pelo Docker para persistência de dados do PostgreSQL
+volumes:
+  postgres-data:
+    driver: local
+
+# ─── Serviços ────────────────────────────────────────────────────────────────
+services:
+
+  # ── PostgreSQL 15 ──────────────────────────────────────────────────────────
+  # Banco de dados relacional para armazenar dados da aplicação
+  postgres:
+    image: postgres:15-alpine
+    container_name: ${COMPOSE_PROJECT_NAME:-portfolio}-postgres
+    restart: unless-stopped
+    environment:
+      # Interpolação de variáveis do .env
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      # Volume nomeado para persistência de dados
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    # Healthcheck para verificar se o banco está pronto
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  # ── Redis 7 ────────────────────────────────────────────────────────────────
+  # Cache em memória para melhorar performance da aplicação
+  redis:
+    image: redis:7-alpine
+    container_name: ${COMPOSE_PROJECT_NAME:-portfolio}-redis
+    restart: unless-stopped
+    command: redis-server --requirepass ${REDIS_PASSWORD} --appendonly yes
+    networks:
+      - app-network
+    # Healthcheck para verificar se o Redis está respondendo
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ── API Node.js 20 Express ─────────────────────────────────────────────────
+  # Aplicação principal que se conecta a PostgreSQL e Redis
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NODE_ENV: ${NODE_ENV:-production}
+    image: ${COMPOSE_PROJECT_NAME:-portfolio}-api:latest
+    container_name: ${COMPOSE_PROJECT_NAME:-portfolio}-api
+    restart: unless-stopped
+    ports:
+      # Mapeia porta 3000 da aplicação para a porta definida em .env
+      - "${API_PORT:-3000}:3000"
+    environment:
+      # Configuração da aplicação
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: 3000
+      # Dados do PostgreSQL (usar nome do serviço como host)
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      # String de conexão do PostgreSQL para ORMs
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      # Dados do Redis (usar nome do serviço como host)
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      # String de conexão do Redis
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
+    networks:
+      - app-network
+    # Aguarda pelos outros serviços até que estejam saudáveis
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    # Healthcheck para verificar se a API está respondendo
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
