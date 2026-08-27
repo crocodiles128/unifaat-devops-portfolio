@@ -1,0 +1,20 @@
+Tentativa de gerar o terraform plan em 2026-08-27:
+
+Comandos executados:
+
+terraform -chdir=aula-03 fmt -recursive
+terraform version
+
+Resultado:
+
+/bin/bash: line 1: terraform: command not found
+
+Observacao:
+
+O ambiente local usado para preparar a entrega nao possui o binario terraform instalado.
+Para gerar a evidencia final, instale o Terraform e execute:
+
+terraform -chdir=aula-03 init
+terraform -chdir=aula-03 fmt -recursive
+terraform -chdir=aula-03 validate
+terraform -chdir=aula-03 plan
