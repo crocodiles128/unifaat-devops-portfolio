@@ -1,0 +1,29 @@
+Tentativa de gerar o terraform plan em 2026-08-29:
+
+Comando executado:
+cd /opt/lampp/htdocs/unifaat-devops-portifolio/aula-03 && terraform validate && echo '---PLAN---' && terraform plan -var='aluno=Lucs José Campo da Rocha' -var='ra=6325123'
+
+Resultado:
+Success! The configuration is valid.
+
+---PLAN---
+Planning failed. Terraform encountered an error while generating this plan.
+
+╷
+│ Error: No valid credential sources found
+│ 
+│   with provider["registry.terraform.io/hashicorp/aws"],
+│   on providers.tf line 12, in provider "aws":
+│   12: provider "aws" {
+│ 
+│ Please see https://registry.terraform.io/providers/hashicorp/aws
+│ for more information about providing credentials.
+│ 
+│ Error: failed to refresh cached credentials, no EC2 IMDS role found,
+│ operation error ec2imds: GetMetadata, request canceled, context deadline
+│ exceeded
+│ 
+╵
+
+Conclusao:
+A configuracao Terraform e sintaticamente valida, mas a execucao do plano exige credenciais AWS configuradas no ambiente local. Sem isso, nao e possivel concluir a criacao real dos recursos na AWS.
