@@ -19,13 +19,13 @@ variable "environment" {
 variable "aluno" {
   description = "Nome completo do aluno para tags obrigatorias."
   type        = string
-  default     = "SEU NOME"
+  default     = "Lucs José Campo da Rocha"
 }
 
 variable "ra" {
   description = "RA do aluno para tags obrigatorias."
   type        = string
-  default     = "SEU-RA"
+  default     = "6325123"
 }
 
 locals {

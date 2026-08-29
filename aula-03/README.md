@@ -40,7 +40,7 @@ terraform plan -out=tfplan
 Para substituir os placeholders das tags:
 
 ```bash
-terraform plan -var="aluno=Seu Nome Completo" -var="ra=Seu RA"
+terraform plan -var="aluno=Lucs José Campo da Rocha" -var="ra=6325123"
 ```
 
 ## Evidencia
