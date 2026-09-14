@@ -1,0 +1,21 @@
+# Terraform state — NUNCA commitar
+*.tfstate
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
+
+# Chaves privadas — NUNCA commitar
+*.pem
+*.key
+
+# Variáveis de ambiente com secrets
+.env
+*.auto.tfvars
+
+# Crash logs
+crash.log
+crash.*.log
+
+# OS
+.DS_Store
+Thumbs.db
