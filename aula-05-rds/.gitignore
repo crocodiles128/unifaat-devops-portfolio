@@ -1,0 +1,13 @@
+# .gitignore
+.terraform/
+*.tfstate
+*.tfstate.backup
+terraform.tfvars
+.terraform.lock.hcl
+
+# Credenciais AWS Academy (NUNCA versionar)
+aws-creds.sh
+
+# Chaves SSH
+*.pem
+*.key

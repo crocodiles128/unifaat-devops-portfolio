@@ -13,7 +13,7 @@ variable "environment" {
 variable "owner_ra" {
   description = "RA do aluno responsável"
   type        = string
-  default     = "6325109"
+  default     = "6325123"
 }
 
 variable "project_name" {
