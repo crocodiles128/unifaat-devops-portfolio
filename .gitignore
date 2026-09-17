@@ -14,3 +14,5 @@ Thumbs.db
 # Build
 dist/
 build/
+
+.croc
