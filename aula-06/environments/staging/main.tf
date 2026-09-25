@@ -1,5 +1,6 @@
 # ──────────────────────────────────────────────────────────────
-# Ambiente DEV — TechNova (aula-06)
+# Ambiente TechNova (aula-06) — dev y staging usan este mismo
+# main.tf con variables diferentes (terraform.tfvars).
 # Demuestra la composición de módulos: output de un módulo se
 # convierte en input de otro.
 # ──────────────────────────────────────────────────────────────
