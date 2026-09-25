@@ -1,0 +1,14 @@
+# Provider plugins e state local (nunca comitar)
+.terraform/
+*.tfstate
+*.tfstate.backup
+tfplan
+
+# Variáveis com segredos
+terraform.tfvars
+*.auto.tfvars
+!terraform.tfvars.example
+
+# Chaves
+*.pem
+.ssh/

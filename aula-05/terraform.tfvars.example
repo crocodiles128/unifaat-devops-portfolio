@@ -1,0 +1,16 @@
+# terraform.tfvars.example
+#
+# Copie para terraform.tfvars (NUNCA comitar: contém a senha do banco).
+#   cp terraform.tfvars.example terraform.tfvars
+
+aws_region   = "us-east-1"
+project_name = "technova"
+
+db_username = "technova_admin"
+db_password = "TroqueEstaSenha123!"
+db_name     = "technova"
+
+# Chave pública usada no key pair do EC2 (a privada fica em ~/.ssh/)
+ssh_public_key_path = "~/.ssh/technova-key.pub"
+
+# Restrinja ao seu IP se quiser fechar o SSH: allowed_ssh_cidr = "SEU-IP/32"
