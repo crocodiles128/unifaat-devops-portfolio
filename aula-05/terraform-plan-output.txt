@@ -21,7 +21,7 @@ rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
 $ terraform validate  [OK]
 Success! The configuration is valid.
-$ terraform plan -input=false  [FAIL]
+$ terraform plan -input=false  [BLOQUEADO-AWS]
 ╷
 │ Error: Backend initialization required, please run "terraform init"
 │ 
